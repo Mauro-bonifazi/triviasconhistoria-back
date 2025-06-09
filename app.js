@@ -1,20 +1,38 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
 const port = process.env.PORT || 3001;
-const mongodb = "mongodb://127.0.0.1:27017/tribia_db";
+const mongodb = process.env.MONGO_URI;
 const cors = require("cors");
 require("dotenv").config();
 
 app.use(cors());
 app.use(bodyParser.json());
 
-//Conección a la base de datos(MongoDB)
-mongoose.connect(mongodb, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+require("dotenv").config(); // Asegurate de que esté arriba
+
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const app = express();
+const port = process.env.PORT || 3001;
+
+const mongodb = process.env.MONGO_URI;
+
+app.use(cors());
+app.use(bodyParser.json());
+
+// Conexión a MongoDB Atlas usando variable de entorno
+mongoose
+  .connect(mongodb, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("🟢 Conectado a MongoDB Atlas"))
+  .catch((error) => console.error("🔴 Error de conexión a MongoDB:", error));
 
 // Importar Rutas
 const triviaRoutes = require("./routes/triviaRoutes");
