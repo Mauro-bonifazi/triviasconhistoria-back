@@ -1,0 +1,12 @@
+[33m9b3e156[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Configuro modelos con nombre explícito de colección para MongoDB Atlas
+[33m01b1732[m Fix: conexión a MongoDB usando MONGO_URI de entorno
+[33ma1eea44[m Conexión a MongoDB Atlas configurada
+[33m24ea540[m modificacion ignore
+[33m9c02e90[m Remove .env from repo and ignore it
+[33m0ef8e62[m Merge branch 'main' of https://github.com/Mauro-bonifazi/triviasconhistoria-back
+[33m12c5170[m Remuevo .env del repo y lo agrego al .gitignore
+[33m993f1fc[m Remuevo .env del repo y lo agrego al .gitignore
+[33m24e45ad[m Delete node_modules directory
+[33mb609f54[m Cambios
+[33m59e5ef9[m first comit
+[33m85953e4[m first commit
