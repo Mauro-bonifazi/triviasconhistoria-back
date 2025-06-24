@@ -107,6 +107,25 @@ const getPopular = async (req, res) => {
     });
   }
 };
+//obtener trivia por id
+const getTriviaById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const trivia = await questionRepository.getQuestionById(id);
+
+    if (!trivia) {
+      return res.status(404).json({ message: "Trivia no encontrada" });
+    }
+
+    res.status(200).json(trivia);
+  } catch (err) {
+    console.error("Error al obtener trivia por ID:", err.message);
+    res.status(500).json({
+      message: "Error al obtener la trivia",
+      error: err.message,
+    });
+  }
+};
 
 module.exports = {
   getQuestions,
@@ -115,4 +134,5 @@ module.exports = {
   deleteQuestion,
   getQuestionsByTitle,
   getPopular,
+  getTriviaById,
 };

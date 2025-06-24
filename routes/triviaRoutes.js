@@ -7,10 +7,13 @@ const {
   deleteQuestion,
   getQuestionsByTitle,
   getPopular,
+  getTriviaById,
 } = require("../controllers/questionController"); // Importa los controladores
 const authMiddleware = require("../middleware/authMiddleware");
 
 router.get("/questions/popular", getPopular);
+//Rura para trivias por id
+router.get("/questions/:id", getTriviaById);
 
 /**
  * @swagger
