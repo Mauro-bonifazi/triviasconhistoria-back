@@ -1,13 +1,29 @@
 const Question = require("../models/Question");
 
+// 1. FUNCIÓN AÑADIDA: Obtener las 3 trivias más visitadas
+const getMostVisitedQuestions = async () => {
+  // .sort({ visit_count: -1 }) -> Ordena de mayor a menor
+  // .limit(3) -> Trae solo 3 resultados
+  return await Question.find().sort({ visit_count: -1 }).limit(3);
+};
+
 //Obtener todas las preguntas
 const getAllQuestions = async () => {
   return await Question.find();
 };
-//Obtener pregunta por id
+
+// 2. FUNCIÓN MODIFICADA: Obtener pregunta por id e incrementar visita
 const getQuestionById = async (id) => {
-  return await Question.findById(id);
+  // Usamos findByIdAndUpdate para encontrar Y actualizar en un solo paso atómico.
+  // $inc: { visit_count: 1 } -> Incrementa el campo visit_count en 1.
+  // { new: true } -> Asegura que la función devuelva el documento ya actualizado.
+  return await Question.findByIdAndUpdate(
+    id,
+    { $inc: { visit_count: 1 } },
+    { new: true }
+  );
 };
+
 //Obter pregunta por titulo
 const getQuestionsByTitle = async (title) => {
   return await Question.find({ title });
@@ -28,9 +44,10 @@ const deleteQuestion = async (id) => {
 
 module.exports = {
   getAllQuestions,
-  getQuestionById,
+  getQuestionById, // Esta función ahora tiene superpoderes
   createQuestion,
   updateQuestion,
   deleteQuestion,
   getQuestionsByTitle,
+  getMostVisitedQuestions, // 3. No olvides exportar la nueva función
 };

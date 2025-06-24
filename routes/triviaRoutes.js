@@ -6,8 +6,11 @@ const {
   updateQuestion,
   deleteQuestion,
   getQuestionsByTitle,
+  getPopular,
 } = require("../controllers/questionController"); // Importa los controladores
 const authMiddleware = require("../middleware/authMiddleware");
+
+router.get("/questions/popular", getPopular);
 
 /**
  * @swagger

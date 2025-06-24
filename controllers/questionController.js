@@ -94,6 +94,19 @@ const deleteQuestion = async (req, res) => {
       .json({ message: "Error al eliminar pregunta", error: err.message });
   }
 };
+// 🔥 NUEVA función para trivias populares
+const getPopular = async (req, res) => {
+  try {
+    const popular = await questionRepository.getMostVisitedQuestions(); // <-- usa tu repo
+    console.log("📊 Populares desde la DB:", popular);
+    res.status(200).json(popular);
+  } catch (err) {
+    res.status(500).json({
+      message: "Error al obtener trivias populares",
+      error: err.message,
+    });
+  }
+};
 
 module.exports = {
   getQuestions,
@@ -101,4 +114,5 @@ module.exports = {
   updateQuestion,
   deleteQuestion,
   getQuestionsByTitle,
+  getPopular,
 };

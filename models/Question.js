@@ -8,8 +8,13 @@ const QuestionSchema = new mongoose.Schema(
       type: String,
       default: "",
       required: false,
-    }, // URL de la imagen del tema
+    },
     introduction: { type: String, required: true },
+
+    // --- LÍNEA A AÑADIR ---
+    visit_count: { type: Number, default: 0 },
+    // --- FIN DE LA LÍNEA A AÑADIR ---
+
     questions: [
       {
         question: { type: String, required: true },
@@ -20,7 +25,7 @@ const QuestionSchema = new mongoose.Schema(
           type: String,
           default: "",
           required: false,
-        }, //Url de la imagen de cada pregunta
+        },
       },
     ],
   },
