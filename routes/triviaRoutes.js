@@ -8,6 +8,7 @@ const {
   getQuestionsByTitle,
   getPopular,
   getTriviaById,
+  getTriviaBySlug,
 } = require("../controllers/questionController"); // Importa los controladores
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -141,5 +142,5 @@ router.delete("/questions/:id", authMiddleware, deleteQuestion); // Ruta para el
  *         description: Pregunta encontrada exitosamente
  */
 router.get("/questions/title/:title", getQuestionsByTitle); // Ruta para obtener preguntas por título
-
+router.get("/slug/:slug", getTriviaBySlug);
 module.exports = router; // Exporta el router para usarlo en `app.js`

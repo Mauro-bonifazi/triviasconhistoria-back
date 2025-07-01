@@ -1,4 +1,5 @@
 const questionRepository = require("../repositories/questionRepository");
+const Slugify = require("slugify");
 
 // Obtener todas las preguntas
 const getQuestions = async (req, res) => {
@@ -32,19 +33,24 @@ const getQuestionsByTitle = async (req, res) => {
 };
 
 // Agregar una nueva trivia
+const slugify = require("slugify");
+
 const newTrivia = async (req, res) => {
-  console.log("Body recibido:", req.body);
   try {
     const { title, description, image, introduction, questions } = req.body;
+
+    const slug = slugify(title, { lower: true, strict: true });
+
     const newQuestion = await questionRepository.createQuestion({
       title,
+      slug,
       description,
       image,
       introduction,
       questions,
     });
+
     res.status(201).json(newQuestion);
-    console.log("REQ BODY:", req.body);
   } catch (err) {
     res
       .status(500)
@@ -98,7 +104,7 @@ const deleteQuestion = async (req, res) => {
 const getPopular = async (req, res) => {
   try {
     const popular = await questionRepository.getMostVisitedQuestions(); // <-- usa tu repo
-    console.log("📊 Populares desde la DB:", popular);
+
     res.status(200).json(popular);
   } catch (err) {
     res.status(500).json({
@@ -126,6 +132,24 @@ const getTriviaById = async (req, res) => {
     });
   }
 };
+//Obtener trivias por Slug
+const getTriviaBySlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const trivia = await questionRepository.findBySlug(slug);
+
+    if (!trivia) {
+      return res.status(404).json({ message: "Trivia no encontrada" });
+    }
+
+    res.json(trivia);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error al obtener trivia por slug",
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   getQuestions,
@@ -135,4 +159,5 @@ module.exports = {
   getQuestionsByTitle,
   getPopular,
   getTriviaById,
+  getTriviaBySlug,
 };

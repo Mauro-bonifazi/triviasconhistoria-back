@@ -41,13 +41,18 @@ const updateQuestion = async (id, data) => {
 const deleteQuestion = async (id) => {
   return await Question.findByIdAndDelete(id);
 };
+//Trivias por Slug
+const findBySlug = async (slug) => {
+  return await Question.findOne({ slug });
+};
 
 module.exports = {
   getAllQuestions,
-  getQuestionById, // Esta función ahora tiene superpoderes
+  getQuestionById,
   createQuestion,
   updateQuestion,
   deleteQuestion,
   getQuestionsByTitle,
-  getMostVisitedQuestions, // 3. No olvides exportar la nueva función
+  getMostVisitedQuestions,
+  findBySlug,
 };
