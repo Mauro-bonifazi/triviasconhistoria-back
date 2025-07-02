@@ -43,7 +43,11 @@ const deleteQuestion = async (id) => {
 };
 //Trivias por Slug
 const findBySlug = async (slug) => {
-  return await Question.findOne({ slug });
+  return await Question.findOneAndUpdate(
+    { slug },
+    { $inc: { visit_count: 1 } },
+    { new: true }
+  );
 };
 
 module.exports = {
