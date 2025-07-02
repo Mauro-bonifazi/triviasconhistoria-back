@@ -62,13 +62,15 @@ const newTrivia = async (req, res) => {
 const updateQuestion = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, image, introduction, questions } = req.body;
+    const { title, description, image, introduction, questions, slug } =
+      req.body;
     const updatedQuestion = await questionRepository.updateQuestion(id, {
       title,
       description,
       image,
       introduction,
       questions,
+      slug,
     });
 
     if (!updatedQuestion) {
