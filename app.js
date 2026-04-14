@@ -3,43 +3,59 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const app = express();
-const port = process.env.PORT || 3001;
 
-// 🔧 Usar variable de entorno
+const app = express();
+
+// 🔧 Variables de entorno
 const mongodb = process.env.MONGO_URI;
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// Conexión a la base de datos
-mongoose
-  .connect(mongodb, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("🟢 Conectado a MongoDB Atlas"))
-  .catch((error) => console.error("🔴 Error al conectar a MongoDB:", error));
-//mportar Rutas
+// --- MODIFICACIÓN PARA MONGODB (SERVERLESS) ---
+let isConnected = false;
+app.use(async (req, res, next) => {
+  const mongodb = process.env.MONGO_URI; // <--- La movimos acá adentro
+
+  if (!isConnected && mongodb) {
+    // Validamos que exista la URI
+    try {
+      await mongoose.connect(mongodb, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      isConnected = true;
+      console.log("🟢 Conectado a MongoDB Atlas");
+    } catch (error) {
+      console.error("🔴 Error al conectar a MongoDB:", error);
+    }
+  }
+  next();
+});
+// Importar Rutas
 const triviaRoutes = require("./routes/triviaRoutes");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 
-//Definir Rutas
+// Definir Rutas
 app.use("/api", triviaRoutes);
 app.use("/api", userRoutes);
 app.use("/auth", authRoutes);
 
-//Agregar Sawagger
-(swaggerJsdoc = require("swagger-jsdoc")),
-  (swaggerUi = require("swagger-ui-express"));
+// Ruta de bienvenida para verificar el despliegue
+app.get("/", (req, res) => {
+  res.send("Backend de Trivias con Historia funcionando en Vercel 🚀");
+});
 
-// Configuración Swagger
+// --- CONFIGURACIÓN SWAGGER ---
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
 const options = {
   definition: {
     openapi: "3.1.0",
     info: {
-      title: "API de Trivias con  Historia",
+      title: "API de Trivias con Historia",
       version: "1.0.0",
       description: "API para una aplicación de trivias sobre historia",
       license: {
@@ -48,23 +64,28 @@ const options = {
       },
       contact: {
         name: "Mauro Bonifazi",
-        url: "",
         email: "maurobonifazi@hotmail.com",
       },
     },
     servers: [
       {
-        url: "http://localhost:3001",
+        url: "https://triviasconhistoria-back.vercel.app", // Podrás cambiar esto por tu URL de Vercel luego
       },
     ],
   },
-  apis: ["./routes/*.js"], // Rutas con anotaciones
+  apis: ["./routes/*.js"],
 };
 
 const specs = swaggerJsdoc(options);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
-// Escucha del servidor
-app.listen(port, () => {
-  // console.log(`Server is running on port ${port}`);
-});
+// --- ESCUCHA DEL SERVIDOR (SOLO LOCAL) ---
+if (process.env.NODE_ENV !== "production") {
+  const port = process.env.PORT || 3001;
+  app.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
+  });
+}
+
+// --- EXPORTAR PARA VERCEL ---
+module.exports = app;
