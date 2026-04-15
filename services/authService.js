@@ -1,6 +1,7 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs"); // 1. Cambiamos a bcryptjs
 const jwt = require("jsonwebtoken");
-const secretKey = process.env.SECRET_KEY;
+// 2. Usamos el nombre que pusimos en Vercel: JWT_SECRET
+const secretKey = process.env.JWT_SECRET;
 const User = require("../models/Users");
 
 exports.authenticate = async (email, password) => {
