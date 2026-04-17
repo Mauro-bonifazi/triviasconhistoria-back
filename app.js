@@ -18,9 +18,11 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      // Si no hay origen (como Postman) o está en la lista, permitimos
+      if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        console.log("Origen bloqueado por CORS:", origin); // Esto saldrá en los logs de Vercel
         callback(new Error("No permitido por CORS"));
       }
     },
